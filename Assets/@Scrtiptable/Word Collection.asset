@@ -1,0 +1,157 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9596a9032b0b2e408629aea1b72ed86, type: 3}
+  m_Name: Word Collection
+  m_EditorClassIdentifier: 
+  words:
+    commandWords:
+      tutorialWord: Menjadi garis yang kita inginkan saat kita berada di bawah dengan
+        Baik keduanya yang di mana dunia pohon berhenti ditemukan Setiap perjalanan
+        antar dunia dilakukan sebelum India kehidupan tidak setiap rumah sering kali
+        menyanyikan Udaranya melihat garis air yang bagus tanpa beberapa saat lihat
+        induk tanaman, lihat suara, pelajari cara membuatnya cukup malam mereka bisa
+        mulai bekerja lebih banyak ditemukan Jenis yang sangat kita akhirnya berhenti
+        tampaknya mungkin.
+      words:
+      - word: Love
+      - word: Word
+      - word: Laugh
+      - word: Lie
+      - word: Life
+      - word: Live
+      - word: Power
+      - word: October
+      - word: Cough
+      - word: Time
+      - word: Trick
+      - word: Sad
+      - word: Smile
+      - word: Overview
+      - word: Although
+      - word: Beside
+      - word: Clown
+      - word: Slide
+      - word: Pointer
+      - word: Mouse
+      - word: Elephant
+      - word: Door
+      - word: Shoes
+      - word: Trash
+      - word: Dark
+      - word: Dash
+    upperRowWords:
+      tutorialWord: Towery troupe typier uptore equip erupt Outer outre pewit piety
+        pique pouty power Purty query quiet twirp twyer uteri wiper write wrote Etui
+        euro peri pert pier pity poet pore port pour pout prey prow pure puri pyre
+        pyro quip quit Repo riot ripe rite rope ropy rote roti roup rout ryot Tier
+        tire tiro tope tore piroque tori tory tour towy trey trio trip trop Trow
+        troy true type typo tyre tyro weir wept wert wipe wire wiry Wore ter purity
+        pyrite quoter
+      words:
+      - word: Tongkat
+      - word: Tali Sepatu
+      - word: Tipp-Ex
+      - word: Topi
+      - word: Tenda
+      - word: Tisu
+      - word: Telepon
+      - word: Tas
+      - word: Wajan
+      - word: Wadah
+      - word: Wayang
+      - word: Wahana
+      - word: Wastafel
+      - word: Wallpaper
+      - word: Wafel
+      - word: Wafer
+      - word: Payung
+      - word: Panci
+      - word: Pensil
+      - word: Penggaris
+      - word: Pulpen
+      - word: Penghapus
+      - word: Palu
+      - word: Pipa
+      - word: Polisi
+    midRowWords:
+      tutorialWord: Dahl agha hajj lass gaff alga dahs asks Gals lags jagg alas jags
+        flak daff Lakh dash gala ashfalls hallahs Ashfall daggas skalds hallah salads
+        Flasks flash skald kakas slags jaggs galas hadal Slash shahs gaffs algal
+        dagga flask dahls daffs Lakhs shags halls glass sagas Kasha salad galls shall
+        dadas falls salsa shads Flags alfas saga half sags fads dhal glad lash Kaka
+        lads fallh hall gads alfa Adds gags gaga hash jaja Fafa ashg dash flash gas
+        daka haka sasa
+      words:
+      - word: Dasi
+      - word: Dadu
+      - word: Dompet
+      - word: Drum
+      - word: Daster
+      - word: Dayung
+      - word: Dempul
+      - word: Dandang
+      - word: Jemuran
+      - word: Jepitan
+      - word: Jilbab
+      - word: Jarum
+      - word: Jepitan
+      - word: Jendela
+      - word: Jaket
+      - word: Jam
+      - word: Lemari
+      - word: Lampu
+      - word: Lonceng
+      - word: Loker
+      - word: Laci
+      - word: Laser
+      - word: Lidi
+      - word: Lili
+      - word: Loteng
+    bottomRowWords:
+      tutorialWord: "cvv cvn cvm cvc cvb cv/ cv. cv, cv  cnc cnb cn/ cn. cn, cn cn
+        cn cmz cmx cmv cmn cmm cmc cmb cm/ cm.cm, cm cm cm ccz cCx ccV ccn com coc
+        ccb cc/ cc cbz cbx cbv cbn cbm cbc cbb cb/ cb.cb, cb cb cb c/z c/x c/v c/n 
+        c/ c/ c.z c.x c.V c.n c.m c.c c.b c. / c..c., c.c.c.c, z c, x c, v c, n c,
+        m c, c c, b c, / c, \u2022 c, , c, c, c, bzx bzv bzn bzm bzc bzb bz/ bz.bz,
+        bz bz bz bxz bxx bxv bxn bxm bxc bxb bx/ bx.bx, bx bx bx bvz bvx bvv  ban
+        bnm bac bnb bn/ bn.bn, bn bn bn bmz bmx bmv bmn bmm bmc bmb"
+      words:
+      - word: Meja
+      - word: Mentari
+      - word: Manuskrip
+      - word: Mangkuk
+      - word: Magnet
+      - word: Mesin
+      - word: Motor
+      - word: Mobil
+      - word: Buku
+      - word: Baju
+      - word: Benang
+      - word: Botol
+      - word: bantal
+      - word: boneka
+      - word: bangku
+      - word: bando
+      - word: Zaman
+      - word: Zebra
+      - word: Zero
+      - word: Zirah
+      - word: Zulhijah
+      - word: Zaitun
+      - word: Zat
+      - word: Zelot
+      - word: Zigot
+  addWithJson: 1
+  commandWords: {fileID: 4900000, guid: d77ba565b7741d34585d22e53bc8656b, type: 3}
+  upperRowWords: {fileID: 4900000, guid: a099aecbccf87e640a7209843e3e3b87, type: 3}
+  midRowWords: {fileID: 4900000, guid: 60e2d96a3f69bf9469979fd2bbe7d35f, type: 3}
+  bottomRowWords: {fileID: 4900000, guid: 87679777b9ab80a41a0f290e82aa6325, type: 3}
