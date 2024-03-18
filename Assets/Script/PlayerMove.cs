@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    private float rotationSpeed = 5f;
+    //private float rotationSpeed = 5f;
     public Animator animator;
     public ZombieMove ZM;
 
+    public static PlayerMove instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Update()
     {
         //if (GameFlow.instance.cdCountdown >= 2 && GameFlow.instance.isCd == false)
@@ -23,37 +28,35 @@ public class PlayerMove : MonoBehaviour
         //        else
         //        {
         //            Debug.Log("Animasi Reload");
-        //            GameFlow.instance.isCd = true;                    
+        //            GameFlow.instance.isCd = true;
         //            shotCounter = 0;
         //        }
         //    }
         //}
-        float mouseX = Input.GetAxis("Mouse X");
-        //float mouseY = Input.GetAxis("Mouse Y");
-        float rotationAmountX = mouseX * rotationSpeed;
-        //float rotationAmountY = mouseY * rotationSpeed;
 
-        transform.Rotate(Vector3.up, rotationAmountX);
-        //transform.Rotate(Vector3.right, rotationAmountY);
+        //======== ROTASI CHAR FROM MOUSE ============================================================================
+        //float mouseX = Input.GetAxis("Mouse X");
+        ////float mouseY = Input.GetAxis("Mouse Y");
+        //float rotationAmountX = mouseX * rotationSpeed;
+        ////float rotationAmountY = mouseY * rotationSpeed;
 
-        Quaternion currentRotationX = transform.rotation;
-        //currentRotationX.eulerAngles = new Vector3(currentRotationX.eulerAngles.x, Mathf.Clamp(currentRotationX.eulerAngles.y, 5f, 35f), currentRotationX.eulerAngles.z);// Besar Rotasi ke kiri dan ke kanan
-        float clampedYRotation = Mathf.Clamp(currentRotationX.eulerAngles.y, 5f, 35f);
-        float newYRotation = Mathf.Clamp(clampedYRotation, 5f, 35f);
-        currentRotationX.eulerAngles = new Vector3(0, newYRotation, 0);
-        transform.rotation = currentRotationX;
+        //transform.Rotate(Vector3.up, rotationAmountX);
+        ////transform.Rotate(Vector3.right, rotationAmountY);
+
+        //Quaternion currentRotationX = transform.rotation;
+        ////currentRotationX.eulerAngles = new Vector3(currentRotationX.eulerAngles.x, Mathf.Clamp(currentRotationX.eulerAngles.y, 5f, 35f), currentRotationX.eulerAngles.z);// Besar Rotasi ke kiri dan ke kanan
+        //float clampedYRotation = Mathf.Clamp(currentRotationX.eulerAngles.y, 5f, 35f);
+        //float newYRotation = Mathf.Clamp(clampedYRotation, 5f, 35f);
+        //currentRotationX.eulerAngles = new Vector3(0, newYRotation, 0);
+        //transform.rotation = currentRotationX;
+
         if (ZM.isShooted)
         {
             Debug.Log("Kena Zombie" + ZM.isShooted);
             Destroy(obj);
         }
 
-        if (IngameEndless.Instance.isReload)
-        {
-            Debug.Log("Animasi Reload");
-            animator.SetBool("isReload", true);
-            Invoke("ReloadAnim", 1.6f);            
-        }
+        
     }
 
     public GameObject bulletPrefab;
@@ -66,7 +69,7 @@ public class PlayerMove : MonoBehaviour
     {
 
         // Set the bullet's position to the shooter's position
-        SoundManager.Instance.PlaySFX(shotClip);
+        SoundManager.instance.PlaySFX2("SFX_Shot");
         obj = Instantiate(bulletPrefab, posBullet.transform.position, Quaternion.identity);
         obj.transform.SetParent(posBullet.transform);
         Debug.Log("Tembak");
@@ -80,9 +83,10 @@ public class PlayerMove : MonoBehaviour
     {
         Destroy(obj);
     }
-     private void ReloadAnim()
-    {
-        animator.SetBool("isReload", false);
-        IngameEndless.Instance.isReload = false;
-    }
+    //public static bool isReloadAnim;
+    //private void ReloadAnim()
+    //{
+    //    animator.SetBool("isReload", false);
+    //    isReloadAnim = false;
+    //}
 }

@@ -26,6 +26,7 @@ public class WordManager :MonoBehaviour
 		words = new List<Word>();
 	}
 
+	private WORD_SELECTION randomSelection;
 	public void WordInit()
 	{
 		hasActiveWord = false;
@@ -34,10 +35,11 @@ public class WordManager :MonoBehaviour
 		correctHitCount = 0;
 		hitCount = 0;
 		//WORD_SELECTION _selection = (WORD_SELECTION)Random.Range(0, 3);
-		SelectWord((WORD_SELECTION)Random.Range(0, 3));
+		randomSelection = (WORD_SELECTION)Random.Range(0, 4); Debug.Log("Hasil Random=" + randomSelection);
+		SelectWordEndless(randomSelection);		
 	}
 
-	private void SelectWord(WORD_SELECTION _selection)
+	private void SelectWordEndless(WORD_SELECTION _selection)
 	{
 		switch (_selection)
 		{
@@ -53,9 +55,9 @@ public class WordManager :MonoBehaviour
 			case WORD_SELECTION.BOT:
 				selectedWords = wordList.words.bottomRowWords.words;
 				break;
-			default:
-				selectedWords = wordList.words.commandWords.words;
-				break;
+			//default:
+			//	selectedWords = wordList.words.commandWords.words;
+			//	break;
 		}
 	}
 	public void SelectWord(int index)
@@ -81,9 +83,11 @@ public class WordManager :MonoBehaviour
 	}
 	public void AddWord(WordDisplay _wordDisplay)
 	{
-		
-		Word word = new Word(selectedWords[Random.Range(0, selectedWords.Count - 1)].word, _wordDisplay);
-		//Debug.Log(_wordDisplay.word);
+		randomSelection = (WORD_SELECTION)Random.Range(0, 4); Debug.Log("Hasil Random=" + randomSelection);
+		SelectWordEndless(randomSelection);
+		Word word = new Word(selectedWords[Random.Range(0, selectedWords.Count-1)].word, _wordDisplay);//Random.Range(0, selectedWords.Count-1)
+		//Debug.Log(selectedWords[Random.Range(0, selectedWords.Count-1)].word, _wordDisplay);//
+		//Debug.Log(selectedWords);
 
 		words.Add(word);
 	}

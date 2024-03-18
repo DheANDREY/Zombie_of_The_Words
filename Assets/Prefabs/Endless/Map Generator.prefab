@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6747857411413560959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6747857411413560834}
+  - component: {fileID: 6747857411413560833}
+  m_Layer: 0
+  m_Name: Map Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6747857411413560834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6747857411413560959}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6747857411413560833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6747857411413560959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00cbbbd3abe7ecd46ab3909007561865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainTemplates:
+  - {fileID: 244744636295311812, guid: c745082452a77f44b9b35c465b9b47a8, type: 3}
+  - {fileID: 245426149290973194, guid: d68dda66c3bb1bf4aadddbdb7f9d723f, type: 3}
+  - {fileID: 4717782155904825087, guid: 512fa2783a9bce34a9999a07b5e60a68, type: 3}
+  - {fileID: -8509755721066363331, guid: ea055b41d57bcfa4f933e17644a305ba, type: 3}
+  - {fileID: 7738817911911822799, guid: b042187c722e52d47a3af6b426d86285, type: 3}
+  - {fileID: -1033126446240985902, guid: 9e5993cc555a2544b9c6f685a01850ec, type: 3}
+  - {fileID: -7216196916881490388, guid: 60338663cedd86c48957f90223ecba9b, type: 3}
+  - {fileID: -523616890372692537, guid: af42fa4d9a7217b40b4022d318c88174, type: 3}
+  terrainTemplateWidth: 30
+  gameCamera: {fileID: 0}
+  areaStartOffset: 0
+  areaEndOffset: 200
+  earlyTerrainTemplates:
+  - {fileID: -2604721953322818063, guid: 0fc04da57036a5a4fbdc516593d4cecc, type: 3}

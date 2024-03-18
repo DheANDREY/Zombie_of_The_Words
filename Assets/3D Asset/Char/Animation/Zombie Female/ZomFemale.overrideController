@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ZomFemale
+  m_Controller: {fileID: 9100000, guid: 9564adc8417e6594389fc3c39c876343, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c5d5d7682461e9b4886fbee781e253d4, type: 2}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 79de4956e3fb40945bec7b7d1a6fb733, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 744257ec7efed69419b3c30ddd73826a, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: e6e284781edc4e4429cd15d5839b01a2, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 351325ec3a65102449523d906850fa8c, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 2d5ede12ff93e2649b2e79ea7bd1b8f2, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 769b15f9f7088af49a7d271d99ffaea2, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: be2ad1ed3cb49354790d77411338d5ef, type: 3}

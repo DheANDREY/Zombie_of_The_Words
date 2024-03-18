@@ -34,22 +34,17 @@ public class UIManager : MonoBehaviour
         moreContainer.SetActive(false);
         chooseType.SetActive(false);
         chooseMode.SetActive(false);
+        Time.timeScale = 1;
         GameManager.Instance.envi.SetActive(false);
         StartCoroutine(OpenNext(UI_mainMenu));
     }
     public void PlayEndlessGame()
     {
-        UI_mainMenu.SetActive(false);
         UI_ingameEndless.SetActive(false);
-        UI_ingameTutorial.SetActive(false);
-        UI_achivement.SetActive(false);
-        moreContainer.SetActive(false);
-        chooseType.SetActive(false);
-        chooseMode.SetActive(false);
-        GameManager.Instance.mode = GAME_MODE.ENDLESS;
+        //GameManager.Instance.mode = GAME_MODE.ENDLESS;
         StartCoroutine( OpenNext(UI_ingameEndless));
     }
-
+    
     public void PlayTutorialsGame()
     {
         UI_mainMenu.SetActive(false);
@@ -70,7 +65,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    IEnumerator OpenNext(GameObject _panelTarget)
+   public IEnumerator OpenNext(GameObject _panelTarget)
     {
         yield return null;
         UI_loading.SetActive(true);

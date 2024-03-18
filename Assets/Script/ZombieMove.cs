@@ -7,7 +7,7 @@ public class ZombieMove : MonoBehaviour
 {
     private GameObject Player;
     private PlayerMove playerMove;
-    private float speed;
+    //private float speed;
     private CapsuleCollider col_player;
     public BoxCollider bullet;
     private Animator animator;
@@ -64,11 +64,12 @@ public class ZombieMove : MonoBehaviour
     {
         if (collision.collider == col_player)
         {
-            speed = 0;
-            animator.SetBool("isAttack", true);            
+            //speed = 0;
+            animator.SetBool("isAttack", true);
             //InvokeRepeating("DealDamage", 1, 3.5f);
-            InvokeRepeating("DealDamage2", 1, 3.5f);
 
+                InvokeRepeating("DealDamage2", 1, 3.5f);
+            
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
             transform.position = position;
@@ -76,12 +77,16 @@ public class ZombieMove : MonoBehaviour
         }
         else 
         {
-            isDead = true;
-            //playerMove.DestroyBullet();
-            speed = 0;
-            animator.SetTrigger("isDeath");
-            //GameFlow.instance.skor++; // Penambah Skor
-            Invoke("ZombieDie", 2.5f);
+            Debug.Log("Mati");
+
+
+
+            //isDead = true;
+            ////playerMove.DestroyBullet();
+            //speed = 0;
+            //animator.SetTrigger("isDeath");
+            ////GameFlow.instance.skor++; // Penambah Skor
+            //Invoke("ZombieDie", 2.5f);
         }
     }
 
@@ -89,12 +94,15 @@ public class ZombieMove : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("Kena Player");
-            speed = 0;
+            //Debug.Log("Kena Player");
+            //speed = 0;
             animator.SetBool("isAttack", true);
             //InvokeRepeating("DealDamage", 1, 3.5f);
-            InvokeRepeating("DealDamage2", 1, 3.5f);
-
+            //if (!WD.isZomDead)
+            //{
+            //    InvokeRepeating("DealDamage2", 1, 3.5f);
+            //}
+            
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
             transform.position = position;
@@ -120,10 +128,8 @@ public class ZombieMove : MonoBehaviour
         }
     }
     private void DealDamage2()
-    {
-        if (!isDead)
-        {
-            PlayerController.instance.Attacked(2);
-        }
+    {        
+            //PlayerController.instance.Attacked(2);
+        
     }
 }

@@ -35,7 +35,7 @@ public class GameFlow : MonoBehaviour
         cdCountdown = cdReload;
         for (int i = 0; i < posisiSpawner.Length; i++)
         {
-            SpawnerZombie.instance.SpawnZombie(posisiSpawner[i].transform.position);
+            //SpawnerZombie.instance.SpawnZombie(posisiSpawner[i].transform.position);
         }
         
     }
@@ -46,7 +46,7 @@ public class GameFlow : MonoBehaviour
         if (isZombieKilled)
         {
             int randomIndex = Random.Range(0, posisiSpawner.Length);
-            SpawnerZombie.instance.SpawnZombie(posisiSpawner[randomIndex].transform.position);
+            //SpawnerZombie.instance.SpawnZombie(posisiSpawner[randomIndex].transform.position);
             isZombieKilled = false;
         }
 

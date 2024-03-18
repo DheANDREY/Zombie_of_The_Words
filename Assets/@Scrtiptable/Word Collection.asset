@@ -47,7 +47,6 @@ MonoBehaviour:
       - word: Shoes
       - word: Trash
       - word: Dark
-      - word: Dash
     upperRowWords:
       tutorialWord: Towery troupe typier uptore equip erupt Outer outre pewit piety
         pique pouty power Purty query quiet twirp twyer uteri wiper write wrote Etui
@@ -58,8 +57,8 @@ MonoBehaviour:
         pyrite quoter
       words:
       - word: Tongkat
-      - word: Tali Sepatu
-      - word: Tipp-Ex
+      - word: Temperamental
+      - word: Terapi
       - word: Topi
       - word: Tenda
       - word: Tisu
@@ -68,11 +67,11 @@ MonoBehaviour:
       - word: Wajan
       - word: Wadah
       - word: Wayang
-      - word: Wahana
+      - word: Wortel
       - word: Wastafel
-      - word: Wallpaper
-      - word: Wafel
-      - word: Wafer
+      - word: Wisatawan
+      - word: Wilayah
+      - word: Wujud
       - word: Payung
       - word: Panci
       - word: Pensil
@@ -94,16 +93,16 @@ MonoBehaviour:
       - word: Dasi
       - word: Dadu
       - word: Dompet
-      - word: Drum
+      - word: Fase
       - word: Daster
       - word: Dayung
       - word: Dempul
       - word: Dandang
       - word: Jemuran
       - word: Jepitan
-      - word: Jilbab
-      - word: Jarum
-      - word: Jepitan
+      - word: Fantasi
+      - word: Kafan
+      - word: Jurnalis
       - word: Jendela
       - word: Jaket
       - word: Jam
@@ -111,11 +110,11 @@ MonoBehaviour:
       - word: Lampu
       - word: Lonceng
       - word: Loker
-      - word: Laci
+      - word: Gerakan
       - word: Laser
-      - word: Lidi
-      - word: Lili
-      - word: Loteng
+      - word: Lidah
+      - word: Latihan
+      - word: Kadal
     bottomRowWords:
       tutorialWord: "cvv cvn cvm cvc cvb cv/ cv. cv, cv  cnc cnb cn/ cn. cn, cn cn
         cn cmz cmx cmv cmn cmm cmc cmb cm/ cm.cm, cm cm cm ccz cCx ccV ccn com coc
@@ -125,31 +124,31 @@ MonoBehaviour:
         bz bz bz bxz bxx bxv bxn bxm bxc bxb bx/ bx.bx, bx bx bx bvz bvx bvv  ban
         bnm bac bnb bn/ bn.bn, bn bn bn bmz bmx bmv bmn bmm bmc bmb"
       words:
-      - word: Meja
-      - word: Mentari
+      - word: Coba
+      - word: Vatikan
       - word: Manuskrip
-      - word: Mangkuk
+      - word: Vandal
       - word: Magnet
       - word: Mesin
-      - word: Motor
+      - word: Cubit
       - word: Mobil
       - word: Buku
       - word: Baju
       - word: Benang
-      - word: Botol
-      - word: bantal
-      - word: boneka
-      - word: bangku
-      - word: bando
+      - word: Bombai
+      - word: Bantal
+      - word: Boneka
+      - word: Bangku
+      - word: Bando
       - word: Zaman
       - word: Zebra
-      - word: Zero
+      - word: Varians
       - word: Zirah
       - word: Zulhijah
       - word: Zaitun
       - word: Zat
-      - word: Zelot
-      - word: Zigot
+      - word: Zamzam
+      - word: Cabik
   addWithJson: 1
   commandWords: {fileID: 4900000, guid: d77ba565b7741d34585d22e53bc8656b, type: 3}
   upperRowWords: {fileID: 4900000, guid: a099aecbccf87e640a7209843e3e3b87, type: 3}

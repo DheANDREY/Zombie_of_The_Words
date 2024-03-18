@@ -1,51 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class IngameEndless : MonoBehaviour
 {
     public static IngameEndless Instance;
-    public float spawnDelayMin,spawnDelayMax,reloadTime;
-    public GameObject[] ammo;
+    public float reloadTime;
+    public GameObject[] ammo;   public int missBullet;
     public Transform player;
-    public Transform[] anchorEnemySpawner;
+    
     public EnemyController enemyPrefabs;
     public bool playerDie;
     public GameObject achievement;
     public TextMeshProUGUI t_timer, bestWPM, bestEPM,bestAccuracy;
+    public TextMeshProUGUI zomCounter, wordCounter;
+    private float minutes, seconds; //private float initialTime = 0;
     private float curStopwatch;
     public Transform parentEnemy;
     public AudioClip reloadClip;
 
+    public PlayerMove playerMove;
     private EnemyController enemyChache;
-    private float currentDelay,curReload;
+    private float delaySpawn = 4;
     private int falseCounter;
     private void Awake()
     {
         Instance = this;
     }
 
-    public GameObject[] posisiSpawner;
+    public SoundManager soundManager;
     private void Start()
-    {
-        //for (int i = 0; i < posisiSpawner.Length; i++)
-        //{
-        //    SpawnerZombie.instance.SpawnZombie(posisiSpawner[i].transform.position);
-        //}
+    {                
+        
     }
+
     private void OnEnable()
     {
+        //seconds = 0;  minutes = 0;
+        SpawnerZombie.instance.DisableWarning();
+        curStopwatch = 0;
         playerDie = false;
         WordManager.hitCount = 0;
         WordManager.wordTypedCount = 0;
         WordManager.Instance.WordInit();
         EventManager.onFalse += EventManager_onFalse;
-         
+        ResetAmmo(); falseCounter = 0;
         GameManager.Instance.envi.SetActive(true);
     }
     private void OnDisable()
     {
-        achievement.SetActive(false);
+        achievement.SetActive(false); //seconds = 0; minutes = 0;
         WordManager.hitCount = 0;
         WordManager.wordTypedCount = 0;
         WordManager.Instance.words.Clear();
@@ -58,76 +64,190 @@ public class IngameEndless : MonoBehaviour
     }
     private void EventManager_onFalse()
     {
-        if (curReload > 0) return;
-        ammo[falseCounter].SetActive(false);
-        falseCounter++;
-        if(falseCounter>= ammo.Length)
+        //if (curReload <= 0) return;
+        if (!PlayerController.isReloadAnim)
         {
-            curReload = reloadTime;
-            falseCounter = 0;
-        }
+            ammo[falseCounter].SetActive(false);
+            falseCounter++; 
+            missBullet--;    //Debug.Log(missBullet);
+            soundManager.PlaySound(SoundEnum.miss);
+            PlayerController.instance.SpawnEffectMiss();
+            if (falseCounter >= ammo.Length)
+            {
+                //curReload = missBullet;
+                falseCounter = 0;
+            }
+        }        
     }
 
     public bool isZombieKilled;
-    public bool isReload;
+    
+    public GameObject cdIcon;
+    public Image cdFill;
+    private float cdTime = 3f;    public static bool isCDreload;
+
     private void Update()
-    {
+    {                
         if (playerDie) return;
-        if (curReload > 0)
-        {
-            curReload -= Time.deltaTime;
-            if (curReload <= 0)
-            {
-                isReload = true;
-                for (int i = 0; i < ammo.Length; i++)
-                {
-                    ammo[i].SetActive(true);
-                }
-                falseCounter = 0;
-                SoundManager.Instance.PlaySFX(reloadClip);
-            }
-            return;
-        }
-        if (!isReload)
-        {
-            foreach (char letter in Input.inputString)
-            {
-                if (Input.anyKeyDown)
-                {
-                    WordManager.hitCount++;
-                    WordManager.Instance.TypeLetter(letter.ToString().ToLower()[0]);
-                }
-            }
-        }
 
-
-        // SPAWN ===============================================
-        if (currentDelay < 0)
+        cdFill.fillAmount = (cdTime/2.25f) / 1;     //Debug.Log("Waktu Reload: "+ cdFill.fillAmount);
+        if (isCDreload)
         {
-            enemyChache = Instantiate(enemyPrefabs, anchorEnemySpawner[Random.Range(0, anchorEnemySpawner.Length - 1)].position, Quaternion.identity);
-            enemyChache.Initialize(player);
-            enemyChache.transform.parent = parentEnemy;
-            currentDelay = Random.Range(spawnDelayMin, spawnDelayMax);
+            ReloadIconOn(true);
+            cdTime -= Time.deltaTime;
+            if (cdTime < 0)
+            {
+                cdTime = 0;
+                isCDreload = false;
+            }
         }
         else
         {
-            currentDelay -= Time.deltaTime;
+            ReloadIconOn(false);
+            cdTime = 3f;
         }
-        //if (isZombieKilled)
-        //{
-        //    Debug.Log("Spawn");
-        //    int randomIndex = Random.Range(0, posisiSpawner.Length);
-        //    SpawnerZombie.instance.SpawnZombie(posisiSpawner[randomIndex].transform.position);
 
-        //    isZombieKilled = false;
+        if (missBullet <= 0)
+        {
+            missBullet = 0;
+            isCDreload = true;
+            PlayerController.isReloadAnim = true;    isReloadTime = true;             
+            StartCoroutine(ReloadCoroutine(0.5f));
+            
+        }        
+
+        if (!isReloadTime)
+        {
+            foreach (char letter in Input.inputString)
+            {
+                if (!isReloadTime)
+                {
+                    if (Input.anyKeyDown)
+                    {
+                        //Debug.Log("playerMove.isReload = " + playerMove.isReload);
+                        WordManager.hitCount++;
+                        WordManager.Instance.TypeLetter(letter.ToString().ToLower()[0]);
+                    }
+                }
+            }
+        }
+
+
+        // SPAWN ZOMBIE ===============================================
+        //if (currentDelay < 0)
+        //{
+        //    enemyChache = Instantiate(enemyPrefabs, anchorEnemySpawner[Random.Range(0, anchorEnemySpawner.Length - 1)].position, Quaternion.identity);
+        //    enemyChache.Initialize(player);
+        //    enemyChache.transform.parent = parentEnemy;
+        //    currentDelay = Random.Range(spawnDelayMin, spawnDelayMax);
+        //}
+        //else
+        //{
+        //    currentDelay -= Time.deltaTime;
+        //}
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        //if (delaySpawn <= 0)
+        //{
+        //    SpawnZombie();
+        //    delaySpawn = 4;
+        //}
+        //else
+        //{
+        //    delaySpawn -= Time.deltaTime;
         //}
 
-        curStopwatch += Time.deltaTime;
-        float minutes = Mathf.FloorToInt(curStopwatch / 60);
-        float seconds = Mathf.FloorToInt(curStopwatch % 60);
 
-        t_timer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        //if (isWaveActive && zombiesPerWave > 0)
+        //{
+        //    zombiesPerWave = Random.Range(4, 5);
+        //    //Debug.Log(isWaveActive); Debug.Log(zombiesPerWave);
+        //    StartNewWave();
+        //}        
+
+        curStopwatch += Time.deltaTime;
+        minutes = Mathf.FloorToInt(curStopwatch / 60);
+        seconds = Mathf.FloorToInt(curStopwatch % 60);
+
+        t_timer.text = string.Format("{0:00} {1:00}", minutes, seconds);
+        wordCounter.text = WordManager.correctHitCount.ToString();
+        zomCounter.text = WordDisplay.zomDeadCounter.ToString(); 
     }
+
+    public bool isReloadTime;
+    private IEnumerator ReloadCoroutine(float delay)
+    {
+        if (isReloadTime)
+        {
+            for (int i = 0; i < ammo.Length; i++)
+            {
+                //Debug.Log("T() playerMove.isReload = " + isReloadTime);
+                ammo[i].SetActive(true);
+                missBullet++;    //Debug.Log(missBullet);
+
+                soundManager.PlaySound(SoundEnum.reload);
+
+                yield return new WaitForSeconds(delay);
+                
+            }
+            
+            falseCounter = 0; isReloadTime = false;
+        }
+    }
+    private void ResetAmmo()
+    {
+        missBullet = 7;
+        // Setiap kali ulang game, Anda mungkin juga perlu memastikan bahwa semua bullet diaktifkan kembali
+        for (int i = 0; i < ammo.Length; i++)
+        {
+            ammo[i].SetActive(true);
+        }
+    }
+
+
+    //public int zombiesPerWave; // Jumlah zombie per gelombang
+    //private int zombiesRemaining, zombieMax; // Jumlah zombie yang tersisa dalam gelombang saat ini
+    //private bool isWaveActive = true;
+    //private void StartNewWave()
+    //{
+    //    //zombiesPerWave = Random.Range(4, 5);        
+    //    //if (isWaveActive && zombiesPerWave > 0)
+    //    //{
+    //        if (delaySpawn <= 0)
+    //        {
+    //            //SpawnZombie();  zombiesPerWave--;
+    //            delaySpawn = 4;
+    //        }
+    //        else
+    //        {
+    //            delaySpawn -= Time.deltaTime;
+    //            if (zombiesPerWave <= 0)
+    //            {
+    //                zombiesPerWave = 0;
+    //                isWaveActive = false;
+    //                Debug.Log("Wave Finished" + zombiesPerWave);
+    //            }
+    //        }
+    //    //}
+    //}
+
+    //void SpawnZombie()
+    //{
+    //    // Instansi zombie baru
+    //    enemyChache = Instantiate(enemyPrefabs, anchorEnemySpawner[Random.Range(0, anchorEnemySpawner.Length - 1)].position, Quaternion.identity);
+    //    enemyChache.Initialize(player);
+    //    enemyChache.transform.parent = parentEnemy;
+    //    zombiesRemaining--;
+
+    //    // Cek apakah semua zombie dalam gelombang telah dispawn
+    //    if (zombiesRemaining == 0)
+    //    {
+    //        // Menunggu hingga semua zombie terkalahkan sebelum memulai gelombang baru
+    //        zombiesRemaining = 0;
+    //        isWaveActive = false;
+    //    }
+    //}
+
     public void ShowEnd()
     {
         for (int i = 0; i < parentEnemy.childCount; i++)
@@ -138,5 +258,17 @@ public class IngameEndless : MonoBehaviour
         bestWPM.text = WordManager.Instance.GetBestWPM(curStopwatch).ToString("00");
         bestEPM.text = WordManager.Instance.GetBestEPM(curStopwatch).ToString("00");
         bestAccuracy.text = WordManager.Instance.GetAccuracy().ToString("00");
+    }
+
+    public void ReloadIconOn(bool isOn)
+    {
+        if (isOn)
+        {
+            cdIcon.SetActive(true);
+        }
+        else
+        {
+            cdIcon.SetActive(false);
+        }
     }
 }

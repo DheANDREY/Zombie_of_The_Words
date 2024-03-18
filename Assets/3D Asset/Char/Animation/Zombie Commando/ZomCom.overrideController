@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ZomCom
+  m_Controller: {fileID: 9100000, guid: 9564adc8417e6594389fc3c39c876343, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c5d5d7682461e9b4886fbee781e253d4, type: 2}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 592a00b65ec414a468e4ee31e47e0429, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 744257ec7efed69419b3c30ddd73826a, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 6db6a0ca35ebcec4c96da0084d843b7a, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 351325ec3a65102449523d906850fa8c, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 3819e9553b538e041a8e475129964dfe, type: 3}
+  - m_OriginalClip: {fileID: -203655887218126122, guid: 769b15f9f7088af49a7d271d99ffaea2, type: 3}
+    m_OverrideClip: {fileID: -203655887218126122, guid: 1ba4ef75b32bd394b850f2207821a694, type: 3}

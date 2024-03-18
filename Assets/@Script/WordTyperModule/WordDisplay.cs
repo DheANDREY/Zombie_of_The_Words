@@ -9,22 +9,48 @@ public class WordDisplay : MonoBehaviour
 	public TextMeshProUGUI text;
 	public bool isNeedChange;
 	[ShowIf("isNeedChange")] public Canvas canvas;
-	[ShowIf("isNeedChange")] public GameObject parent;
+	[ShowIf("isNeedChange")] public GameObject panelWord, parent;
 	private int index;
 	Color32[] newVertexColors;
 	Color32 c0;
-	public void SetWord(string word)
+
+	private SoundManager soundManager;
+    private void Start()
+    {
+		soundManager = GameObject.FindGameObjectWithTag("sound").GetComponent<SoundManager>();
+		playerCamera = Camera.main;
+    }
+
+	private Camera playerCamera;
+    private void Update()
+    {
+        
+
+    }
+
+	public static WordDisplay instance;
+    private void Awake()
+    {
+		instance = this;
+    }
+
+    public void SetWord(string word)
 	{
 		text.text = word;
 		index = 0;
 	}
 
+	public EnemyController enemyController;
+	public GameObject vfxHitted; public Transform[] posVFXSpawn;
 	public void RemoveLetter()
 	{
 		if(isNeedChange)
 		{
 			text.text = text.text.Remove(0, 1);
+			enemyController.ZomDamagedAnim();
 			text.color = correct;
+			Instantiate(vfxHitted, posVFXSpawn[Random.Range(0, posVFXSpawn.Length - 1)].position, Quaternion.identity);
+			
 		}
 		else
 		{
@@ -121,15 +147,34 @@ public class WordDisplay : MonoBehaviour
 			text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 		}
 	}
+
+	public Animator enemyAnim;
+	public bool isZomDead;	public CapsuleCollider offCollider;
+	public static int zomDeadCounter;
 	public void RemoveWord()
 	{
 		if (parent)
 		{
-			Destroy(parent);
+			offCollider.enabled = false;
+			isZomDead = true;
+			//Debug.Log("ZomDead= "+isZomDead);
+			offCollider.enabled = false;
+			soundManager.PlaySound(SoundEnum.zomDead); zomDeadCounter++;//Debug.Log("SFX Dead");	
+			//Debug.Log("ZomDeadCounter= " + SpawnerZombie.zombieDieCounter);
+			CharMoveController CMC = GameObject.FindAnyObjectByType<CharMoveController>();
+			CMC.isDamaged = false;
+			enemyAnim.SetTrigger("isDeath"); //Invoke("ZombieDie", 2.5f);
+			Destroy(panelWord);	EnemyController.instance.isAttackZom = false;	CharMoveController.instance.isDamaged = false;			
+			Destroy(parent,3.5f); SpawnerZombie.instance.zombieCounter--;	
 		}
 		else
 		{
 			Debug.Log("Done");
+			isZomDead = false;
 		}
+	}
+	public void sfxDead()
+    {
+		soundManager.PlaySound(SoundEnum.zomDead); Debug.Log("SFX Dead");
 	}
 }

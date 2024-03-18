@@ -7,6 +7,8 @@ TagManager:
   - Target
   - bullet
   - Zombie
+  - sound
+  - playerCamera
   layers:
   - Default
   - TransparentFX
