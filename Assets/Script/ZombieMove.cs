@@ -41,16 +41,6 @@ public class ZombieMove : MonoBehaviour
             Invoke("ZombieDie", 2.5f);
         }
 
-        //float distance = Vector3.Distance(transform.position, col_player.transform.position);
-
-        //if (distance > 0)
-        //{
-        //    Vector3 direction = (col_player.transform.position - transform.position);
-
-        //    transform.rotation = Quaternion.LookRotation(col_player.transform.position - transform.position);
-        //    transform.position += direction * Time.deltaTime * speed;
-        //}
-
         if (animator.GetBool("isAttack") == true)
         {
             return; // Hentikan gerakan jika sedang menyerang

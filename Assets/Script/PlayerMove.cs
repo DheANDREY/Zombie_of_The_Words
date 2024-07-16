@@ -15,48 +15,11 @@ public class PlayerMove : MonoBehaviour
     }
     private void Update()
     {
-        //if (GameFlow.instance.cdCountdown >= 2 && GameFlow.instance.isCd == false)
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        if (shotCounter < maxCounter)
-        //        {
-        //            Debug.Log("Tembak");
-        //            animator.SetTrigger("isShoot");
-        //            Shoot();
-        //        }
-        //        else
-        //        {
-        //            Debug.Log("Animasi Reload");
-        //            GameFlow.instance.isCd = true;
-        //            shotCounter = 0;
-        //        }
-        //    }
-        //}
-
-        //======== ROTASI CHAR FROM MOUSE ============================================================================
-        //float mouseX = Input.GetAxis("Mouse X");
-        ////float mouseY = Input.GetAxis("Mouse Y");
-        //float rotationAmountX = mouseX * rotationSpeed;
-        ////float rotationAmountY = mouseY * rotationSpeed;
-
-        //transform.Rotate(Vector3.up, rotationAmountX);
-        ////transform.Rotate(Vector3.right, rotationAmountY);
-
-        //Quaternion currentRotationX = transform.rotation;
-        ////currentRotationX.eulerAngles = new Vector3(currentRotationX.eulerAngles.x, Mathf.Clamp(currentRotationX.eulerAngles.y, 5f, 35f), currentRotationX.eulerAngles.z);// Besar Rotasi ke kiri dan ke kanan
-        //float clampedYRotation = Mathf.Clamp(currentRotationX.eulerAngles.y, 5f, 35f);
-        //float newYRotation = Mathf.Clamp(clampedYRotation, 5f, 35f);
-        //currentRotationX.eulerAngles = new Vector3(0, newYRotation, 0);
-        //transform.rotation = currentRotationX;
-
         if (ZM.isShooted)
         {
             Debug.Log("Kena Zombie" + ZM.isShooted);
             Destroy(obj);
-        }
-
-        
+        }        
     }
 
     public GameObject bulletPrefab;

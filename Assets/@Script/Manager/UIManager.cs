@@ -20,6 +20,14 @@ public class UIManager : MonoBehaviour
     {
         Instance = this;
     }
+    private void Update()
+    {
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    Time.timeScale = 1;
+        //    SpawnerZombie.instance.ReturnAllZombiesToPool();
+        //}
+    }
     public void ExitGame()
     {
         Application.Quit();

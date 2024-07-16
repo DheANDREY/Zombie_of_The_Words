@@ -35,7 +35,7 @@ public class WordManager :MonoBehaviour
 		correctHitCount = 0;
 		hitCount = 0;
 		//WORD_SELECTION _selection = (WORD_SELECTION)Random.Range(0, 3);
-		randomSelection = (WORD_SELECTION)Random.Range(0, 4); Debug.Log("Hasil Random=" + randomSelection);
+		randomSelection = (WORD_SELECTION)Random.Range(0, 4); //Debug.Log("Hasil Random=" + randomSelection);
 		SelectWordEndless(randomSelection);		
 	}
 
@@ -83,7 +83,7 @@ public class WordManager :MonoBehaviour
 	}
 	public void AddWord(WordDisplay _wordDisplay)
 	{
-		randomSelection = (WORD_SELECTION)Random.Range(0, 4); Debug.Log("Hasil Random=" + randomSelection);
+		randomSelection = (WORD_SELECTION)Random.Range(0, 4); //Debug.Log("Hasil Random=" + randomSelection);
 		SelectWordEndless(randomSelection);
 		Word word = new Word(selectedWords[Random.Range(0, selectedWords.Count-1)].word, _wordDisplay);//Random.Range(0, selectedWords.Count-1)
 		//Debug.Log(selectedWords[Random.Range(0, selectedWords.Count-1)].word, _wordDisplay);//

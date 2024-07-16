@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class EnemyController : MonoBehaviour
 {
-    public float speed, damage;
-    //public float phaseMultiplier, numIntoMaxLvl;
-    public float attackRate;
+    public EnemyStats enemyStats;
+    public float speed, damage, attackRate;    
     public WordDisplay wordDisplay;
     private Transform target;
     private float curRate;
@@ -16,6 +16,14 @@ public class EnemyController : MonoBehaviour
     private CapsuleCollider collider;
     private CharMoveController CMC;
     private Transform charTransform;
+
+    private IObjectPool<EnemyController> enemyPool;
+
+
+    public void SetPool(IObjectPool<EnemyController> pool)
+    {
+        enemyPool = pool;
+    }
     //private SoundManager soundManager;
     public static EnemyController instance;
     private void Awake()
@@ -24,6 +32,9 @@ public class EnemyController : MonoBehaviour
     }
     private void Start()
     {
+        speed = enemyStats.speed;
+        damage = enemyStats.damage;
+        attackRate = enemyStats.attackRate;
         //phaseMultiplier = ((speed * 4) - speed) / numIntoMaxLvl; Debug.Log(phaseMultiplier);
         // Cari game object dengan nama "charMain"
         GameObject charMainGameObject = GameObject.Find("CharMain");
@@ -43,12 +54,26 @@ public class EnemyController : MonoBehaviour
         animator = GetComponent<Animator>();
         collider_player = GameObject.FindGameObjectWithTag("Player").GetComponent<CapsuleCollider>();
         CMC = GameObject.FindObjectOfType<CharMoveController>();
-    }
+
+        //Initialize2(charMainGameObject.transform);        
+    }    
 
     public void Initialize(Transform _target)
     {
         target = _target;
         WordManager.Instance.AddWord(wordDisplay);    
+    }
+    public void Initialize2(Transform player)
+    {
+        this.target = player;
+        WordManager.Instance.AddWord(wordDisplay);
+        // Inisialisasi lainnya
+    }
+
+    void OnDisable()
+    {
+        // Mengembalikan zombie ke pool saat dinonaktifkan
+        //FindObjectOfType<SpawnerZombie>().ReturnZombieToPool(this);
     }
 
     private Vector3 currentPosition;
@@ -185,19 +210,32 @@ public class EnemyController : MonoBehaviour
     //    }
     //}
 
-    public void ZombieDie()
-    {
-        GetComponent<Collider>().enabled = false;
-        CancelInvoke("DealDamage");
-        
-        //soundManager.PlaySound(SoundEnum.ZomDead);
-        Destroy(gameObject);
-        IngameEndless.Instance.isZombieKilled = true;
-        //GameFlow.instance.isZombieKilled = true;
-    }
-
     public void ZomDamagedAnim()
     {
         animator.SetTrigger("isHitted");
+    }
+
+    public bool isInPool = false;
+    public void BackToPool()
+    {
+        Debug.Log("Back To Pool");
+        if (!isInPool)
+        {
+            isInPool = true;
+            enemyPool.Release(this);
+        }
+    }
+    public GameObject panelWord;
+    [SerializeField] private CapsuleCollider colliderC;    
+    public void ResetStatFromPool()
+    {
+        panelWord.SetActive(true);
+        colliderC.enabled = true;
+        isTouchPlayer = false; isAttackZom = false;
+        speed = enemyStats.speed;
+        damage = enemyStats.damage;
+        attackRate = enemyStats.attackRate;
+        wordDisplay.isZomDead = false;
+        wordDisplay.ResetColorWord();
     }
 }

@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Pool;
 using TMPro;
 
 public class SpawnerZombie : MonoBehaviour
 {
-    public EnemyController[] zombie;
-    private Dictionary<EnemyController, float> initialZombieSpeeds = new Dictionary<EnemyController, float>();
-    private Dictionary<EnemyController, float> initialZombieDamages = new Dictionary<EnemyController, float>();
+    public EnemyStats[] zombie;
+    public EnemyController[] enemyPrefab;
+    private Dictionary<EnemyStats, float> initialZombieSpeeds = new Dictionary<EnemyStats, float>();
+    private Dictionary<EnemyStats, float> initialZombieDamages = new Dictionary<EnemyStats, float>();
     private Vector3 posisi;
     public GameObject posisiSpawn, warningZombieW;
     public int lvlDisplay; private bool isLvlUP;
@@ -18,12 +20,45 @@ public class SpawnerZombie : MonoBehaviour
     public float numIntoMaxLvl=15; public float[] phaseMultiplierSpd; public float[] initialSpeed; public float[] initialDamage;
     public float[] phaseMultiplierDmg;
     public static int correctWordCounter;
+    public int initialPoolSize;
+    private IObjectPool<EnemyController>[] enemyPool;
+    private List<EnemyController> spawnedEnemies = new List<EnemyController>();
 
     private CharMoveController CMC;
     public static SpawnerZombie instance;
     private void Awake()
     {
-        instance = this;        
+        instance = this;
+        //enemyPool = new ObjectPool<EnemyController>(SpawnEnemyPool, OnGet, OnRelease);
+        enemyPool = new IObjectPool<EnemyController>[enemyPrefab.Length];
+        for (int i = 0; i < enemyPrefab.Length; i++)
+        {
+            int index = i; // Untuk menghindari masalah dengan lambda closure
+            enemyPool[i] = new ObjectPool<EnemyController>(
+                () => SpawnEnemyPool(index), OnGet, OnRelease);
+        }
+    }
+    private void OnGet(EnemyController enemy)
+    {
+        int randomAnchorIndex = Random.Range(0, anchorEnemySpawner.Length);
+        enemy.transform.position =  anchorEnemySpawner[randomAnchorIndex].position;
+        enemy.isInPool = false;
+        enemy.gameObject.transform.SetParent(posisiSpawn.transform);
+        enemy.gameObject.SetActive(true);
+        enemy.Initialize2(player);
+        enemy.ResetStatFromPool();
+    }
+    private void OnRelease(EnemyController enemy)
+    {
+        enemy.gameObject.SetActive(false);
+    }
+    private EnemyController SpawnEnemyPool(int index)
+    {
+        //int randomEnemyIndex = Random.Range(0, enemyPrefab.Length);
+        
+        EnemyController enemy = Instantiate(enemyPrefab[index]);
+        enemy.SetPool(enemyPool[index]);
+        return enemy;
     }
 
     private void OnEnable()
@@ -34,15 +69,15 @@ public class SpawnerZombie : MonoBehaviour
         zombieCounter = zombiesPerWave;
         //lvlDisplay = 1;
         CharMoveController.instance.isDamaged = false;
-        isWaveStop = false;
+        isSpawnZombie = true;    isWaveStop = false;
         //isWaveActive = true;                
     }
     private void OnDisable()
     {
+        isSpawnZombie = false;
         zombieCounter = 0;
         ResetZombieStats();
     }
-
     private void Start()
     {
         CMC = GameObject.FindObjectOfType<CharMoveController>();        
@@ -53,12 +88,55 @@ public class SpawnerZombie : MonoBehaviour
 
     private GameObject instantiatedObj;
     private EnemyController enemyChache;
+    public bool isSpawnZombie;
     public void SpawnZombie()
-    {        
-        enemyChache = Instantiate(enemyPrefab[Random.Range(0,enemyPrefab.Length)], anchorEnemySpawner[Random.Range(0, anchorEnemySpawner.Length - 1)].position, Quaternion.identity);
-        enemyChache.Initialize(player);
-        enemyChache.transform.parent = parentEnemy;
-        zombiesRemaining--;
+    {
+        if (isSpawnZombie)
+        {
+            // Mendapatkan pool secara acak
+            int randomEnemyIndex = Random.Range(0, zombie.Length);
+            //int randomAnchorIndex = Random.Range(0, anchorEnemySpawner.Length);
+
+            //EnemyController enemy = enemyPools[randomEnemyIndex].Get();
+            //enemy.transform.position = anchorEnemySpawner[randomAnchorIndex].position;
+            //enemy.transform.rotation = Quaternion.identity;
+            //enemy.Initialize2(player);
+            //enemy.transform.parent = parentEnemy;
+            //GameObject enemyObject = ObjectPoolManager.SpawnObject(zombie[randomEnemyIndex].gameObject, anchorEnemySpawner[randomAnchorIndex].position, Quaternion.identity, ObjectPoolManager.PoolType.GameObject);
+            EnemyController enemy = enemyPool[randomEnemyIndex].Get();
+            spawnedEnemies.Add(enemy);
+            //EnemyController enemy = enemy.Initialize2(player);
+            //if (enemyObject != null)
+            //{
+            //    EnemyController enemy = enemyObject.GetComponent<EnemyController>();
+            //    if (enemy != null)
+            //    {
+            //        enemy.Initialize2(player);
+            //    }
+            //    else
+            //    {
+            //        Debug.LogWarning("Spawned object does not have an EnemyController component.");
+            //    }
+            //}
+
+            zombiesRemaining--;
+        }
+        else
+        {
+            Debug.Log("Stop Spawn");
+        }
+    }
+    //public void ReturnZombieToPool(EnemyController enemy)
+    //{
+    //    ObjectPoolManager.ReturnObjectToPool(enemy.gameObject);
+    //}
+    public void ReturnAllZombiesToPool()
+    {
+        foreach (var enemy in spawnedEnemies)
+        {
+            enemy.BackToPool();
+        }
+        spawnedEnemies.Clear();
     }
 
     private void Update()
@@ -150,8 +228,8 @@ public class SpawnerZombie : MonoBehaviour
         }        
     }
 
-    public EnemyController[] enemyPrefab;
-    public Transform[] anchorEnemySpawner; public Transform player, parentEnemy;
+    
+    public Transform[] anchorEnemySpawner; public Transform player;
     private int zombiesRemaining,zombiesPerWave; float delaySpawns ,spdDelay = 400, spdSpawn=100;
     private bool isWaveStop;
     public int zombieCounter;

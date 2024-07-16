@@ -23,6 +23,7 @@ public class IngameEndless : MonoBehaviour
 
     public PlayerMove playerMove;
     private EnemyController enemyChache;
+    //[SerializeField]private VFXPooling vfxPooling;
     private float delaySpawn = 4;
     private int falseCounter;
     private void Awake()
@@ -32,8 +33,8 @@ public class IngameEndless : MonoBehaviour
 
     public SoundManager soundManager;
     private void Start()
-    {                
-        
+    {
+        //vfxPooling = GameObject.FindGameObjectWithTag("Player").GetComponent<VFXPooling>();
     }
 
     private void OnEnable()
@@ -56,12 +57,14 @@ public class IngameEndless : MonoBehaviour
         WordManager.wordTypedCount = 0;
         WordManager.Instance.words.Clear();
         EventManager.onFalse -= EventManager_onFalse;
-        if (parentEnemy.childCount <= 0) return;
-        for (int i = 0; i < parentEnemy.childCount; i++)
-        {
-            Destroy(parentEnemy.GetChild(i).gameObject);
-        }
+        //if (parentEnemy.childCount <= 0) return;
+        //for (int i = 0; i < parentEnemy.childCount; i++)
+        //{
+        //    Destroy(parentEnemy.GetChild(i).gameObject);
+        //}
     }
+    [SerializeField] private Transform posVFXMiss;
+    public GameObject wrongType;
     private void EventManager_onFalse()
     {
         //if (curReload <= 0) return;
@@ -71,7 +74,9 @@ public class IngameEndless : MonoBehaviour
             falseCounter++; 
             missBullet--;    //Debug.Log(missBullet);
             soundManager.PlaySound(SoundEnum.miss);
-            PlayerController.instance.SpawnEffectMiss();
+            //vfxPooling.SpawnVFX(0,posVFXMiss.position, Quaternion.identity);
+            ObjectPoolManager.SpawnObject(wrongType, posVFXMiss.position, Quaternion.identity, ObjectPoolManager.PoolType.ParticleSystem);
+            //PlayerController.instance.SpawnEM();
             if (falseCounter >= ammo.Length)
             {
                 //curReload = missBullet;
@@ -87,8 +92,14 @@ public class IngameEndless : MonoBehaviour
     private float cdTime = 3f;    public static bool isCDreload;
 
     private void Update()
-    {                
-        if (playerDie) return;
+    {
+        if (playerDie)
+        {
+            SpawnerZombie.instance.ReturnAllZombiesToPool();
+            Time.timeScale = 0f;
+            ShowEnd();
+            return;
+        }
 
         cdFill.fillAmount = (cdTime/2.25f) / 1;     //Debug.Log("Waktu Reload: "+ cdFill.fillAmount);
         if (isCDreload)
@@ -130,40 +141,7 @@ public class IngameEndless : MonoBehaviour
                     }
                 }
             }
-        }
-
-
-        // SPAWN ZOMBIE ===============================================
-        //if (currentDelay < 0)
-        //{
-        //    enemyChache = Instantiate(enemyPrefabs, anchorEnemySpawner[Random.Range(0, anchorEnemySpawner.Length - 1)].position, Quaternion.identity);
-        //    enemyChache.Initialize(player);
-        //    enemyChache.transform.parent = parentEnemy;
-        //    currentDelay = Random.Range(spawnDelayMin, spawnDelayMax);
-        //}
-        //else
-        //{
-        //    currentDelay -= Time.deltaTime;
-        //}
-        //---------------------------------------------------------------
-        //---------------------------------------------------------------
-        //if (delaySpawn <= 0)
-        //{
-        //    SpawnZombie();
-        //    delaySpawn = 4;
-        //}
-        //else
-        //{
-        //    delaySpawn -= Time.deltaTime;
-        //}
-
-
-        //if (isWaveActive && zombiesPerWave > 0)
-        //{
-        //    zombiesPerWave = Random.Range(4, 5);
-        //    //Debug.Log(isWaveActive); Debug.Log(zombiesPerWave);
-        //    StartNewWave();
-        //}        
+        }     
 
         curStopwatch += Time.deltaTime;
         minutes = Mathf.FloorToInt(curStopwatch / 60);

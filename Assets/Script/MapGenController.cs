@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MapGenController : MonoBehaviour
 {
+    [SerializeField] Transform playerTransform;
     [Header("Templates")]
     public List<TerrainTemplateController> terrainTemplates;
-    //public float terrainTemplateWidth;
 
     [Header("Generator Area")]
     public Camera gameCamera;
@@ -14,7 +14,7 @@ public class MapGenController : MonoBehaviour
     public float areaEndOffset;
 
     [Header("Force Early Template")]
-    public List<TerrainTemplateController> earlyTerrainTemplates;
+    //public List<TerrainTemplateController> earlyTerrainTemplates;
 
     private const float debugLineHeight = 10.0f;
 
@@ -33,28 +33,10 @@ public class MapGenController : MonoBehaviour
 
         spawnedTerrain = new List<GameObject>();
 
-        //lastGeneratedPositionY = GetHorizontalPositionStart();
-        //lastRemovedPositionY = lastGeneratedPositionY - terrainTemplates.terrainTemplateWidth;
-
-        // Set posisi awal dengan posisi X dari prefab pertama dalam earlyTerrainTemplate
-        if (earlyTerrainTemplates.Count > 0)
-        {
-            lastGeneratedPositionY = earlyTerrainTemplates[0].transform.position.y; // Mengambil posisi Y prefab pertama
-        }
-        else
-        {
             lastGeneratedPositionY = GetHorizontalPositionStart(); // Jika tidak ada earlyTerrainTemplate, gunakan posisi start yang sesuai
-        }
+        
             lastRemovedPositionY = lastGeneratedPositionY - terrainTemplates[numPrefab].terrainTemplateWidth;
 
-            // Generate terrain sesuai dengan earlyTerrainTemplates
-            //foreach (TerrainTemplateController terrainEarly in earlyTerrainTemplates)
-            //{
-            //    GenerateTerrain(lastGeneratedPositionY, terrainEarly);
-            //    lastGeneratedPositionY += terrainEarly.terrainTemplateWidth;
-            //}
-
-            // Generate terrain secara terus-menerus hingga mencapai area akhir
             while (lastGeneratedPositionY < GetHorizontalPositionEnd())
             {
                 GenerateTerrain(lastGeneratedPositionY);
@@ -63,11 +45,9 @@ public class MapGenController : MonoBehaviour
                 
     }
 
-    // Update is called once per frame
     void Update()
-    {
-
-            while (lastGeneratedPositionY < GetHorizontalPositionEnd())
+    {        
+        while (lastGeneratedPositionY < GetHorizontalPositionEnd())
             {
                 GenerateTerrain(lastGeneratedPositionY);
                 lastGeneratedPositionY += terrainTemplates[numPrefab].terrainTemplateWidth; //Debug.Log("Terrain Width: "+ terrainTemplates[numPrefab].terrainTemplateWidth);
@@ -85,13 +65,10 @@ public class MapGenController : MonoBehaviour
     private int numPrefab;
     private void GenerateTerrain(float posX, TerrainTemplateController forceterrain = null)
     {
-        //GameObject newTerrain = Instantiate(terrainTemplates[Random.Range(0, terrainTemplates.Count)].gameObject, transform);
         numPrefab = Random.Range(0, terrainTemplates.Count);
-        // Pilih prefab terrain secara acak dari daftar template
         GameObject selectedTerrainPrefab = terrainTemplates[numPrefab].gameObject;
 
-        // Instantiate prefab baru
-        GameObject newTerrain = Instantiate(selectedTerrainPrefab, transform);
+        GameObject newTerrain = GenerateFromPool(selectedTerrainPrefab, transform);  //Instantiate(selectedTerrainPrefab, transform);
 
         // Atur posisi X dan Z sesuai dengan posX
         newTerrain.transform.position = new Vector3(posX, 0f, selectedTerrainPrefab.transform.position.z);
@@ -119,19 +96,26 @@ public class MapGenController : MonoBehaviour
         // after found;
         if (terrainToRemove != null)
         {
-            spawnedTerrain.Remove(terrainToRemove);
-            Destroy(terrainToRemove,70f);
-        }
-    }
+            float playerPosX = playerTransform.position.x;
+            float bufferZoneWidth = 5f;
 
-    private void GetTerrainWidth()
-    {
-        foreach (TerrainTemplateController terrain in terrainTemplates)
-        {
-            float terrainWidth = terrain.terrainTemplateWidth;
-            // Lakukan sesuatu dengan nilai terrainWidth
+            if (Mathf.Abs(playerPosX - posX) > bufferZoneWidth)
+            {
+                spawnedTerrain.Remove(terrainToRemove);
+                Destroy(terrainToRemove);
+            }
         }
     }
+     
+
+    //private void GetTerrainWidth()
+    //{
+    //    foreach (TerrainTemplateController terrain in terrainTemplates)
+    //    {
+    //        float terrainWidth = terrain.terrainTemplateWidth;
+    //        // Lakukan sesuatu dengan nilai terrainWidth
+    //    }
+    //}
     private float GetHorizontalPositionStart()
     {
         //return gameCamera.ViewportToWorldPoint(new Vector2(0f, 0f)).x + areaStartOffset;
@@ -154,6 +138,7 @@ public class MapGenController : MonoBehaviour
                 GameObject newItemFromPool = pool[item.name][0];
                 pool[item.name].Remove(newItemFromPool);
                 newItemFromPool.SetActive(true);
+                newItemFromPool.transform.parent = parent;
                 return newItemFromPool;
             }
         }

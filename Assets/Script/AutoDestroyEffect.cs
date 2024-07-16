@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class AutoDestroyEffect : MonoBehaviour
 {
-    public float durationDestroy;
-    void Update()
+    private void OnParticleSystemStopped()
     {
-        Invoke("DestroyEffect", durationDestroy);
-    }
-
-    private void DestroyEffect()
-    {
-        Destroy(gameObject);
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 }

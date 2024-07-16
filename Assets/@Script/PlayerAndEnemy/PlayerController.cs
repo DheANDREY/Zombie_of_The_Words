@@ -14,10 +14,15 @@ public class PlayerController : MonoBehaviour
     public Slider s_HP;
 
     private EnemyController currentEnemy;
+    //[SerializeField] private VFXPooling vfxPooling;
     private float curentHP;
+    //public int initialPoolSize = 15;
+    //public GameObject poolParent;
+    //private GameObjectPool vfxPool;
     private void Start()
     {
         //SM = GameObject.FindAnyObjectByType<SoundManager>();
+        //vfxPool = new GameObjectPool(missEffect, initialPoolSize, poolParent);
     }
     private void Update()
     {
@@ -64,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public GameObject target, shotEffect, missEffect, damagedEffect;   private GameObject instantiatedEffect;
+    public GameObject target, damagedEffect, shotEffect;   private GameObject instantiatedEffect;
     public Animator animator;   public Transform posShotEffect;
     private void EventManager_onType()
     {
@@ -72,55 +77,32 @@ public class PlayerController : MonoBehaviour
         //PlayerMove rotateChar = GetComponent<PlayerMove>();
         Transform targetTransform = target.transform;
 
-        //Vector3 direction = targetTransform.position - rotateToTarget.transform.position;
-
-        //// Menghitung rotasi yang diinginkan dalam bentuk quaternion
-        //Quaternion desiredRotation = Quaternion.LookRotation(direction);
-
-        //// Mengonversi rotasi ke dalam Euler angle (derajat) untuk membatasi nilai rotasi hanya antara 10 hingga 70 derajat
-        //Vector3 euler = desiredRotation.eulerAngles;
-        //euler.x = Mathf.Clamp(euler.x, -40f, -65f);
-
-        //// Mengonversi kembali ke quaternion
-        //desiredRotation = Quaternion.Euler(euler);
-
-        //rotateToTarget.transform.LookAt(targetTransform);
-
-        //SoundManager.Instance.PlaySFX(shotClip);
         soundManager.PlaySound(SoundEnum.shot);
         animator.SetTrigger("isShoot");
 
-        instantiatedEffect = Instantiate(shotEffect, posShotEffect.position, Quaternion.identity);
-
-        //rotateToTarget.transform.rotation = desiredRotation;
-
-        //transform.LookAt(currentEnemy.transform);
-        //Bullet go = Instantiate(bulletPrefabs, weaponTip.transform.position, Quaternion.identity);
-        //go.InitializeBullet(currentEnemy.transform);
+        //instantiatedEffect = Instantiate(shotEffect, posShotEffect.position, Quaternion.identity);
+        //vfxPooling.SpawnVFX(1, posShotEffect.position, Quaternion.identity);
+        ObjectPoolManager.SpawnObject(shotEffect, posShotEffect.position, Quaternion.identity, ObjectPoolManager.PoolType.ParticleSystem);
     }
 
-    public Transform[] posDamaged;
+    public Transform[] posDamaged;  
     public void Attacked(float _damage)
     {
         //SoundManager.PlaySFX(hittedClip);
         curentHP -= _damage;
         soundManager.PlaySound(SoundEnum.hitted);
-        instantiatedEffect = Instantiate(damagedEffect, posDamaged[Random.Range(0, posDamaged.Length - 1)].position, Quaternion.identity);
+        //instantiatedEffect = Instantiate(damagedEffect, posDamaged[Random.Range(0, posDamaged.Length - 1)].position, Quaternion.identity);
+        //vfxPooling.SpawnVFX(2, posShotEffect.position, Quaternion.identity);
+        ObjectPoolManager.SpawnObject(damagedEffect, posDamaged[Random.Range(0, posDamaged.Length - 1)].position, Quaternion.identity, ObjectPoolManager.PoolType.ParticleSystem);
             //curentHP -= _damage;
             s_HP.value = curentHP;
             if (curentHP <= 0)
             {
                 IngameEndless.Instance.playerDie = true;
-                Time.timeScale = 0f;
-                IngameEndless.Instance.ShowEnd();
+                //SpawnerZombie.instance.ReturnAllZombiesToPool();
+                //Time.timeScale = 0f;
+                //IngameEndless.Instance.ShowEnd();
             }        
-    }
-
-    public Transform posMissFX;
-    public void SpawnEffectMiss()
-    {
-        instantiatedEffect = Instantiate(missEffect, posShotEffect.position, Quaternion.identity);
-        instantiatedEffect.transform.SetParent(posMissFX);
     }
 
     public static bool isReloadAnim;

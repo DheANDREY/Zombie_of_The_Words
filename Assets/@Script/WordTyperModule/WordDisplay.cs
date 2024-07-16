@@ -5,7 +5,7 @@ using TMPro;
 using NaughtyAttributes;
 public class WordDisplay : MonoBehaviour
 {
-	public Color32 correct, incorrect,nextLetter;
+	public Color32 correct, incorrect,nextLetter,resetColor;
 	public TextMeshProUGUI text;
 	public bool isNeedChange;
 	[ShowIf("isNeedChange")] public Canvas canvas;
@@ -13,20 +13,19 @@ public class WordDisplay : MonoBehaviour
 	private int index;
 	Color32[] newVertexColors;
 	Color32 c0;
+	private Camera playerCamera;
+	private Transform target;
 
 	private SoundManager soundManager;
     private void Start()
     {
 		soundManager = GameObject.FindGameObjectWithTag("sound").GetComponent<SoundManager>();
 		playerCamera = Camera.main;
-    }
+		target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
-	private Camera playerCamera;
-    private void Update()
-    {
-        
-
-    }
+		//EnemyController.instance.Initialize2(target);
+		panelWord.SetActive(true);
+    }	
 
 	public static WordDisplay instance;
     private void Awake()
@@ -39,9 +38,14 @@ public class WordDisplay : MonoBehaviour
 		text.text = word;
 		index = 0;
 	}
+	public void ResetColorWord()
+    {
+		text.color = resetColor;
+    }
 
 	public EnemyController enemyController;
 	public GameObject vfxHitted; public Transform[] posVFXSpawn;
+	//[SerializeField] private VFXPooling vfxPooling;
 	public void RemoveLetter()
 	{
 		if(isNeedChange)
@@ -49,8 +53,9 @@ public class WordDisplay : MonoBehaviour
 			text.text = text.text.Remove(0, 1);
 			enemyController.ZomDamagedAnim();
 			text.color = correct;
-			Instantiate(vfxHitted, posVFXSpawn[Random.Range(0, posVFXSpawn.Length - 1)].position, Quaternion.identity);
-			
+			//Instantiate(vfxHitted, posVFXSpawn[Random.Range(0, posVFXSpawn.Length - 1)].position, Quaternion.identity);
+			//vfxPooling.SpawnVFX(0, posVFXSpawn[Random.Range(0, posVFXSpawn.Length - 1)].position, Quaternion.identity);
+			ObjectPoolManager.SpawnObject(vfxHitted, posVFXSpawn[Random.Range(0, posVFXSpawn.Length - 1)].position, Quaternion.identity, ObjectPoolManager.PoolType.ParticleSystem);
 		}
 		else
 		{
@@ -159,13 +164,16 @@ public class WordDisplay : MonoBehaviour
 			isZomDead = true;
 			//Debug.Log("ZomDead= "+isZomDead);
 			offCollider.enabled = false;
-			soundManager.PlaySound(SoundEnum.zomDead); zomDeadCounter++;//Debug.Log("SFX Dead");	
+			soundManager.PlaySound(SoundEnum.zomDead); zomDeadCounter++;Debug.Log("Add ZomCounter");	
 			//Debug.Log("ZomDeadCounter= " + SpawnerZombie.zombieDieCounter);
 			CharMoveController CMC = GameObject.FindAnyObjectByType<CharMoveController>();
 			CMC.isDamaged = false;
 			enemyAnim.SetTrigger("isDeath"); //Invoke("ZombieDie", 2.5f);
-			Destroy(panelWord);	EnemyController.instance.isAttackZom = false;	CharMoveController.instance.isDamaged = false;			
-			Destroy(parent,3.5f); SpawnerZombie.instance.zombieCounter--;	
+			panelWord.SetActive(false);
+			EnemyController.instance.isAttackZom = false;	CharMoveController.instance.isDamaged = false;
+			StartCoroutine(ReturnToPoolDelayed(3.5f));
+			SpawnerZombie.instance.zombieCounter--;	
+			//StartCoroutine(ReturnToPoolDelayed(3.5f));
 		}
 		else
 		{
@@ -173,6 +181,33 @@ public class WordDisplay : MonoBehaviour
 			isZomDead = false;
 		}
 	}
+	public GameObject thisZombie;
+	private IEnumerator ReturnToPoolDelayed(float delay)
+	{		
+		yield return new WaitForSeconds(delay);	Debug.Log("ReturnZombie");
+		if (thisZombie != null)
+		{
+			// Dapatkan komponen EnemyController dari thisZombie
+			EnemyController enemyController = thisZombie.GetComponent<EnemyController>();
+
+			// Pastikan enemyController tidak null
+			if (enemyController != null)
+			{
+				// Panggil metode BackToPool pada enemyController
+				enemyController.BackToPool();
+			}
+			else
+			{
+				Debug.LogWarning("EnemyController component not found on thisZombie.");
+			}
+		}
+		else
+		{
+			Debug.LogWarning("thisZombie is null.");
+		}
+		//ObjectPoolManager.ReturnObjectToPool(thisZombie);
+	}
+
 	public void sfxDead()
     {
 		soundManager.PlaySound(SoundEnum.zomDead); Debug.Log("SFX Dead");
